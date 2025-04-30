@@ -216,14 +216,10 @@ with tab3:
     st.write("Ask me about sustainability, environmental issues, or if you should do something specific for the environment!")
 
     # Initialize Gemini API
-                            
+    GOOGLE_API_KEY = " " # enter your API key hhere
     genai.configure(api_key=GOOGLE_API_KEY)
     model = genai.GenerativeModel('gemini-2.0-flash')
-
-    # Create two columns for layout
     tip_col, suggestion_col = st.columns([2, 1])
-
-    # Display daily tip in main column
     with tip_col:
         st.subheader("Daily Eco Tip")
         tip_container = st.container(height=100)
@@ -233,8 +229,7 @@ with tab3:
         if st.button("Get New Tip", use_container_width=True):
             st.session_state.daily_tip = random.choice(eco_tips)
             st.rerun()
-
-    # Sample questions in second column
+            
     with suggestion_col:
         st.subheader("Try asking about:")
         st.markdown("""
@@ -243,29 +238,19 @@ with tab3:
         - Biggest environmental problems
         - Should I use plastic straws?
         """)
-
-    # Divider for visual separation
     st.divider()
-
-    # Chat interface with improved styling
     st.subheader("Ask EcoBot")
 
-    # User input for chatbot with custom styling
     user_question = st.text_input(
         "Type your environmental question here:",
         placeholder="E.g., How do I recycle batteries? What is climate change? Should I use plastic?",
         key="ecobot_input"
     )
-
-    # Create a chat container
     chat_container = st.container()
 
     if user_question:
-        # Display user question
         with chat_container:
             st.write(f"**You**: {user_question}")
-
-        # Call Gemini API
         try:
             with st.spinner("EcoBot is thinking..."):
                 prompt = f"""
@@ -277,8 +262,6 @@ with tab3:
                 """
 
                 response = model.generate_content(prompt)
-
-                # Display Gemini's response
                 with chat_container:
                     if response.text:
                         st.write(f"**EcoBot**: {response.text}")
@@ -290,7 +273,6 @@ with tab3:
                 st.error(f"**EcoBot**: An error occurred: {e}. Please check your API key and try again.")
 
     else:
-        # Initial state - show greeting
         with chat_container:
             st.write(
                 "**EcoBot**: Hello! I'm here to help answer your environmental questions. What would you like to know about sustainability?")
